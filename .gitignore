@@ -1,0 +1,8 @@
+src/vendor
+src/mysql_data
+src/.env
+src/node_modules
+src/public/build
+src/public/storage
+*.idea
+/.vscode

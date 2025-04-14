@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0.1
+    restart: unless-stopped
+    container_name: crmarket_db
+    ports:
+      - 3306:3306
+    networks:
+      - crmarket_network
+    volumes:
+      - mysql_data:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: crmarket
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: password
+
+  php:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: .
+    container_name: crmarket_api
+    volumes:
+      - ./src:/var/www/html/src
+    networks:
+      - crmarket_network
+    ports:
+      - "8888:80"
+
+volumes:
+  mysql_data:
+
+networks:
+  crmarket_network:
