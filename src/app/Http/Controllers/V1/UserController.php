@@ -71,9 +71,4 @@ class UserController extends BaseController
             ]
         ], Response::HTTP_OK);
     }
-
-    public function list()
-    {
-        return User::all();
-    }
 }
