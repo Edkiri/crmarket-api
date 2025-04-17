@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,16 +41,26 @@ class Handler extends ExceptionHandler
             ], Response::HTTP_BAD_REQUEST);
         });
 
-        $this->renderable(function (NotFoundHttpException $e, Request $request) {
-            return response()->json([
-                'message' => $e->getMessage(),
-            ], Response::HTTP_NOT_FOUND);
-        });
-
         $this->renderable(function (AuthenticationException $e, Request $request) {
             return response()->json([
                 'message' => $e->getMessage(),
             ], Response::HTTP_UNAUTHORIZED);
+        });
+
+        $this->renderable(function (NotFoundHttpException $e, Request $request) {
+            $previous = $e->getPrevious();
+
+            if ($previous instanceof ModelNotFoundException) {
+                $model = class_basename($previous->getModel());
+
+                return response()->json([
+                    'message' => "$model not found."
+                ], Response::HTTP_NOT_FOUND);
+            }
+
+            return response()->json([
+                'message' => 'Not found.'
+            ], Response::HTTP_NOT_FOUND);
         });
 
         $this->renderable(function (Throwable $e, Request $request) {
