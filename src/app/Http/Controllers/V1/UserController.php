@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\UserLoginRequest;
-use App\Http\Requests\UserSignupRequest;
+use App\Http\Requests\Users\UserLoginRequest;
+use App\Http\Requests\Users\UserSignupRequest;
 use App\Models\Market;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
