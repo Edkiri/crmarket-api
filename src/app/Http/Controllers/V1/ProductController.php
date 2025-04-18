@@ -6,6 +6,7 @@ use App\Http\Filters\ProductFilter;
 use App\Http\Requests\Products\ProductCreateRequest;
 use App\Http\Requests\Products\ProductFilterRequest;
 use App\Http\Requests\Products\ProductUpdateRequest;
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -25,8 +26,9 @@ class ProductController extends BaseController
             ->apply(Product::with(['categories']))
             ->paginate(15);
 
-        return response()->json($products);
+        return ProductResource::collection($products);
     }
+
     public function create(ProductCreateRequest $request)
     {
         $validated = $request->validated();
