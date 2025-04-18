@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Http\Filters\ProductFilter;
 use App\Http\Requests\Products\ProductCreateRequest;
+use App\Http\Requests\Products\ProductFilterRequest;
 use App\Http\Requests\Products\ProductUpdateRequest;
 use App\Models\Product;
 use Illuminate\Routing\Controller as BaseController;
@@ -15,15 +17,16 @@ class ProductController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function index()
+    public function index(ProductFilterRequest $request)
     {
-        $products = Product::with('market')->get();
+        $filters = new ProductFilter($request);
 
-        return response()->json([
-            'data' => $products,
-        ], Response::HTTP_OK);
+        $products = $filters
+            ->apply(Product::with(['categories']))
+            ->paginate(15);
+
+        return response()->json($products);
     }
-
     public function create(ProductCreateRequest $request)
     {
         $validated = $request->validated();
