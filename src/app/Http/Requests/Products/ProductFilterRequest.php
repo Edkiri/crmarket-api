@@ -9,7 +9,6 @@ class ProductFilterRequest extends FormRequest
     public function rules()
     {
         return [
-            'market_id'        => 'nullable|integer|exists:markets,id',
             'reference'        => 'nullable|string|max:255',
             'name'             => 'nullable|string|max:255',
             'brand'            => 'nullable|string|max:255',

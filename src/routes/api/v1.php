@@ -8,7 +8,7 @@ use App\Http\Controllers\V1\UserController;
 Route::post('/auth/signup', [UserController::class, 'signup']);
 Route::post('/auth/login', [UserController::class, 'login']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'is-owner'])->group(function () {
 
     // Products
     Route::get('/products', [ProductController::class, 'index']);
