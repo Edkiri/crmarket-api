@@ -5,6 +5,7 @@ namespace App\Http\Controllers\V1;
 use App\Http\Requests\Users\UserLoginRequest;
 use App\Http\Requests\Users\UserSignupRequest;
 use App\Models\Market;
+use App\Models\Role;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -63,11 +64,20 @@ class UserController extends BaseController
 
         $token = $user->createToken('apiToken')->plainTextToken;
 
+        $market = Market::where('slug_name', $validated['slug_name'])->firstOrFail();
+        $role_id = $user->markets()
+            ->where('markets.id', $market->id)
+            ->withPivot('role_id')
+            ->first()
+            ->pivot->role_id;
+
         return response()->json([
             'success' => true,
             'data' => [
                 'token' => $token,
                 'user' => $user,
+                'market' => $market,
+                'role_id' => $role_id
             ]
         ], Response::HTTP_OK);
     }

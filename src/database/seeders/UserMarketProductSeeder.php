@@ -6,7 +6,9 @@ use App\Models\Category;
 use App\Models\User;
 use App\Models\Market;
 use App\Models\Product;
+use App\Models\Role;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
@@ -14,6 +16,10 @@ class UserMarketProductSeeder extends Seeder
 {
     public function run(): void
     {
+        Role::create(['name' => 'super-admin']);
+        Role::create(['name' => 'admin']);
+        Role::create(['name' => 'viewer']);
+
         $user = User::create([
             'name'     => 'Test User',
             'email'    => 'user@example.com',
@@ -21,7 +27,6 @@ class UserMarketProductSeeder extends Seeder
         ]);
 
         $market = Market::create([
-            'user_id'   => $user->id,
             'name'      => 'Tech Market',
             'slug_name' => Str::slug('Tech Market'),
             'icon'      => 'https://example.com/icon.png',
@@ -34,6 +39,14 @@ class UserMarketProductSeeder extends Seeder
             'Memorias RAM',
             'Discos Duros'
         ];
+
+        DB::table('market_user_role')->insert([
+            'market_id' => $market->id,
+            'user_id'   => $user->id,
+            'role_id'   => 2,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
 
         $categoryModels = collect($categories)->map(function ($name) {
             return Category::create(['name' => $name, 'slug' => Str::slug($name)]);
