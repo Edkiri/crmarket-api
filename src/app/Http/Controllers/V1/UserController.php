@@ -18,28 +18,6 @@ class UserController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function signup(UserSignupRequest $request)
-    {
-        $validated = $request->validated();
-
-        $user = User::create([
-            'name'     => $validated['name'],
-            'email'    => $validated['email'],
-            'password' => Hash::make($validated['password']),
-        ]);
-
-        Market::create([
-            'name' => $validated['projectName'],
-            'slug_name' => Str::slug($validated['projectName']),
-            'user_id' => $user->id,
-        ]);
-
-        return response()->json([
-            'data' => $user,
-            'message' => 'User created successfully.',
-        ], Response::HTTP_CREATED);
-    }
-
     public function login(UserLoginRequest $request)
     {
         $validated = $request->validated();
@@ -64,7 +42,8 @@ class UserController extends BaseController
 
         $token = $user->createToken('apiToken')->plainTextToken;
 
-        $market = Market::where('slug_name', $validated['slug_name'])->firstOrFail();
+        $market = Market::where('domain', $validated['domain'])->firstOrFail();
+        
         $role_id = $user->markets()
             ->where('markets.id', $market->id)
             ->withPivot('role_id')

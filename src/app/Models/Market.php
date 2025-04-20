@@ -12,7 +12,7 @@ class Market extends Model
     protected $fillable = [
         'user_id',
         'name',
-        'slug_name',
+        'domain',
         'icon'
     ];
 

@@ -11,7 +11,7 @@ class UserLoginRequest extends FormRequest
         return [
             'email' => 'required|email|max:255',
             'password' => 'required|string',
-            'slug_name' => 'required|string'
+            'domain' => 'required|string'
         ];
     }
 }

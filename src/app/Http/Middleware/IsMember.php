@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Market;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -16,8 +15,8 @@ class IsMember
 
         if (!$marketId) {
             return response()->json([
-                'message' => 'market_id query is required'
-            ], Response::HTTP_BAD_REQUEST);
+                'message' => 'Unauthorized'
+            ], Response::HTTP_FORBIDDEN);
         }
 
         $user = $request->user();
@@ -29,7 +28,7 @@ class IsMember
 
         if (!$isMember) {
             return response()->json([
-                'message' => 'You are not a member of this market'
+                'message' => 'Unauthorized'
             ], Response::HTTP_FORBIDDEN);
         }
 

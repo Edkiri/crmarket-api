@@ -24,6 +24,7 @@ class ProductController extends BaseController
 
         $products = $filters
             ->apply(Product::with(['categories']))
+            ->orderBy('id', 'desc')
             ->paginate(15);
 
         return ProductResource::collection($products);
