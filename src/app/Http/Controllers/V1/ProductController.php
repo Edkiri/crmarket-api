@@ -34,9 +34,9 @@ class ProductController extends BaseController
     {
         $validated = $request->validated();
 
-        $categoryIds = $validated['categoryIds'] ?? [];
+        $categoryIds = $validated['category_ids'] ?? [];
 
-        unset($validated['categoryIds']);
+        unset($validated['category_ids']);
 
         $product = Product::create($validated);
 
@@ -62,13 +62,13 @@ class ProductController extends BaseController
     public function update(ProductUpdateRequest $request, Product $product)
     {
         $validated   = $request->validated();
-        $categoryIds = $validated['categoryIds'] ?? null;
+        $categoryIds = $validated['category_ids'] ?? null;
 
-        unset($validated['categoryIds']);
+        unset($validated['category_ids']);
 
         $product->update($validated);
 
-        if (array_key_exists('categoryIds', $request->all())) {
+        if (array_key_exists('category_ids', $request->all())) {
             $product->categories()->sync($categoryIds ?? []);
         }
 
@@ -91,11 +91,11 @@ class ProductController extends BaseController
     public function addProductCategories(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'categoryIds' => ['required', 'array'],
-            'categoryIds.*' => ['exists:categories,id'],
+            'category_ids' => ['required', 'array'],
+            'category_ids.*' => ['exists:categories,id'],
         ]);
 
-        $product->categories()->syncWithoutDetaching($validated['categoryIds']);
+        $product->categories()->syncWithoutDetaching($validated['category_ids']);
 
         return response()->json([
             'success' => true,
@@ -106,11 +106,11 @@ class ProductController extends BaseController
     public function updateCategories(Request $request, Product $product)
     {
         $validated = $request->validate([
-            'categoryIds' => ['nullable', 'array'],
-            'categoryIds.*' => ['exists:categories,id'],
+            'category_ids' => ['nullable', 'array'],
+            'category_ids.*' => ['exists:categories,id'],
         ]);
 
-        $product->categories()->sync($validated['categoryIds'] ?? []);
+        $product->categories()->sync($validated['category_ids'] ?? []);
 
         return response()->json([
             'success' => true,

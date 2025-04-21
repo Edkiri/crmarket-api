@@ -18,8 +18,8 @@ class ProductUpdateRequest extends FormRequest
             'sale_price'    => ['nullable', 'numeric'],
             'is_active'     => ['boolean'],
             'description'   => ['nullable', 'string'],
-            'categoryIds'   => ['sometimes', 'array'],
-            'categoryIds.*' => ['exists:categories,id'],
+            'category_ids'   => ['sometimes', 'array'],
+            'category_ids.*' => ['exists:categories,id'],
         ];
     }
 }
