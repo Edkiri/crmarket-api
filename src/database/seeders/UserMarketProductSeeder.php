@@ -21,9 +21,9 @@ class UserMarketProductSeeder extends Seeder
         Role::create(['name' => 'viewer']);
 
         $user = User::create([
-            'name'     => 'Test User',
-            'email'    => 'user@example.com',
-            'password' => Hash::make('password'),
+            'name'     => 'Julian Jose',
+            'email'    => env('ADMIN_EMAIL', 'julian@jose.com'),
+            'password' => Hash::make(env('ADMIN_PASSWORD', 'password')),
         ]);
 
         $market = Market::create([
@@ -44,8 +44,6 @@ class UserMarketProductSeeder extends Seeder
             'market_id' => $market->id,
             'user_id'   => $user->id,
             'role_id'   => 2,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         $categoryModels = collect($categories)->map(function ($name) {
