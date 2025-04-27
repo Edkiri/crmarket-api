@@ -10,6 +10,7 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('market_id')->references('id')->on('markets')->onDelete('cascade');
             $table->string('name');
             $table->string('slug')->unique();
             $table->timestamps();

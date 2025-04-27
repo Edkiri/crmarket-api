@@ -80,8 +80,10 @@ class ProductFilter
             ? $value
             : explode(',', $value);
 
-        $this->builder->whereHas('categories', function ($query) use ($categories) {
-            $query->whereIn('category_id', $categories);
-        });
+        foreach ($categories as $category) {
+            $this->builder->whereHas('categories', function (Builder $query) use ($category) {
+                $query->where('categories.id', $category);
+            });
+        }
     }
 }

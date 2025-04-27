@@ -14,11 +14,15 @@ class CategoryController extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function index()
+    public function index(Request $request)
     {
+        $validated = $request->validate([
+            'market_id'     => ['required', 'exists:markets,id'],
+        ]);
+
         return response()->json([
             'success' => true,
-            'data' => Category::all()
+            'data' => Category::where('market_id', $validated['market_id'])->orderBy('id', 'DESC')->get()
         ], Response::HTTP_OK);
     }
 
@@ -26,11 +30,13 @@ class CategoryController extends BaseController
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'unique:categories,name'],
+            'market_id' => ['required', 'exists:markets,id'],
         ]);
 
         $category = Category::create([
+            'market_id' => $validated['market_id'],
             'name' => $validated['name'],
-            'slug' => Str::slug($validated['name'])
+            'slug' => Str::slug($validated['name']),
         ]);
 
         return response()->json([

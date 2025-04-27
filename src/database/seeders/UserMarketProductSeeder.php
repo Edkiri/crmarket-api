@@ -37,7 +37,17 @@ class UserMarketProductSeeder extends Seeder
             'GPUs',
             'CPUs',
             'RAM',
-            'Hardrive'
+            'Hardrive',
+            'Monitors',
+            'Motherboards',
+            'Power Supplies',
+            'Cooling Systems',
+            'Sound Cards',
+            'Computer Cases',
+            'Networking Devices',
+            'Webcams',
+            'Mice',
+            'Headsets'
         ];
 
         DB::table('market_user_role')->insert([
@@ -46,8 +56,8 @@ class UserMarketProductSeeder extends Seeder
             'role_id'   => 2,
         ]);
 
-        $categoryModels = collect($categories)->map(function ($name) {
-            return Category::create(['name' => $name, 'slug' => Str::slug($name)]);
+        $categoryModels = collect($categories)->map(function ($name) use($market) {
+            return Category::create(['market_id' => $market->id, 'name' => $name, 'slug' => Str::slug($name)]);
         });
 
         $graphicsCards = [
